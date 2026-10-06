@@ -1,6 +1,4 @@
-# ============================================================
 # DOCUMENTACIÓN PANDAS
-# ============================================================
 
 # pd.DataFrame() → crea una tabla (DataFrame) a partir de datos como listas o diccionarios.
 
