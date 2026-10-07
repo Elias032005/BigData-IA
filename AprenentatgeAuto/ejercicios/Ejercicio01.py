@@ -213,3 +213,4 @@ df2_limpio = df2_limpio.rename(columns={'puntos':'Puntuación'})
 print(df2_limpio)
 
 print("Ejercicio 15. Repetir la práctica en google Colab")
+print("https://colab.research.google.com/drive/10uC6N4Ul6O0uBqT_1pyMxJWG6D3MEny-?usp=sharing")
