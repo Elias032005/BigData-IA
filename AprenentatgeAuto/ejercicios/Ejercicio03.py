@@ -1,7 +1,7 @@
 # HE USADO IA PORQUE HAY PUNTOS QUE SI NO FUERA POR ELLA NO LO SACABA, todo el código que me ha generado la IA está marcado con comentarios de mas.
 
 import pandas as pd
-
+import math 
 # 1 Cargar y exploración de datos
 df = pd.read_csv('datos_estadistica_alumnos.csv')
 
@@ -169,6 +169,123 @@ varianza_funciones = sum(map(lambda x : x**2, desviacion_funciones)) / len(desvi
 
 varianza_pandas = df['puntos_prueba'].var(ddof=0)
 
-print(f"Varianza Bucle: {varianza_bucle}")
-print(f"Varianza Funciones: {varianza_funciones}")
-print(f" Varianza Pandas: {varianza_pandas}")
+print(f"Varianza Bucle: {varianza_bucle:.2f}")
+print(f"Varianza Funciones: {varianza_funciones:.2f}")
+print(f" Varianza Pandas: {varianza_pandas:.2}")
+
+# Ejercicio 7: Desviación estándar
+# Método 1: Bucle
+desviacion_estandar_bucle = varianza_bucle ** 0.5
+# Método 2: Funciones
+desviacion_estandar_funciones = math.sqrt(varianza_funciones) 
+# Método 3: Pandas
+desviacion_estandar_pandas = df['puntos_prueba'].std(ddof=0)
+print(f" Varianza Estandar Bucle: {desviacion_estandar_bucle} ")
+print(f" Varianza Estandar Funciones: {desviacion_estandar_funciones}")
+print(f" Varianza Estandar Pandas: {desviacion_estandar_pandas}")
+
+# Ejercicio 8: Normalización min-max
+# Método 1: Bucle
+minimo_bucle = puntos_ordenados_bucle[0]
+maximo_bucle = puntos_ordenados_bucle[-1]
+
+valores_normalizados_bucle = []
+for punto in puntos_ordenados_bucle:
+    valor_normalizado_bucle = (punto - minimo_bucle) / (maximo_bucle - minimo_bucle)
+    valores_normalizados_bucle.append(valor_normalizado_bucle)
+
+# Método 2: Funciones
+puntos = list(df['puntos_prueba'])
+
+minimo_funciones = min(puntos)
+maximo_funciones = max(puntos)
+
+valores_normalizados_funciones = list(map(lambda x : (x - minimo_funciones) / (maximo_funciones - minimo_funciones), puntos))
+
+# Método 3: Pandas
+minimo_pandas = df['puntos_prueba'].min()
+maximo_pandas = df['puntos_prueba'].max()
+
+df['normalizacion'] = (df['puntos_prueba'] - minimo_pandas) / (maximo_pandas - minimo_pandas)
+
+
+print("Normalización Método Bucle")
+for punto in valores_normalizados_bucle:
+    print(f"{punto:.2f}")
+print("Normalización Método Funciones")
+for punto in valores_normalizados_funciones:
+    print(f"{punto:.2f}")
+
+print("Normalización Método Pandas")
+print(df)
+
+# Ejercicio 9: Estandaricación z-score
+
+# Método 1: Bucle
+estandarizacion_z_score_bucle = []
+for punto in puntos_ordenados_bucle:
+    valor_estandarizacion_z_score_bucle = (punto - media_bucle) / desviacion_estandar_bucle
+    estandarizacion_z_score_bucle.append(valor_estandarizacion_z_score_bucle)
+
+# Método 2 : Funciones
+estandarizacion_z_score_funciones = list(map(lambda x: ((x - media_funciones) /desviacion_estandar_funciones), puntos_ordenados_funciones ))
+
+
+# Método 3: Pandas
+df['puntos_estandarizados'] = (df['puntos_prueba'] - df['puntos_prueba'].mean()) / df['puntos_prueba'].std(ddof=0)
+
+print("Estandarizacion z-score Método Bucle")
+for punto in estandarizacion_z_score_bucle:
+    print(f"{punto:.2f}")
+print("Estandarizacion z-score Método Funciones")
+for punto in estandarizacion_z_score_funciones:
+    print(f"{punto:.2f}")
+
+print("Estandarizacion z-score Método Pandas")
+print(df)
+
+
+# Ejercicio 10: Interpretacion final
+
+# Método 1 : Bucle
+nombres = list(df['nombre'])
+puntos = list(df['puntos_prueba'])
+
+print("Bucle")
+for i in range(len(puntos)):
+    if puntos[i] > media_bucle:
+        print(f"El alumno {nombres[i]} está por encima de la media")
+    elif puntos[i] < media_bucle:
+        print(f"El alumno {nombres[i]} está por debajo de la media")
+    else:
+        print(f"El alumno {nombres[i]} tiene la misma puntuación que la media")
+
+
+valor_normalizado_bajo_bucle = valores_normalizados_bucle[0]
+valor_normalizado_alto_bucle = valores_normalizados_bucle[-1]
+
+puntos = list(df["puntos_prueba"])
+nombres = list(df["nombre"])
+
+for i in range(len(puntos)):
+    valor = (puntos[i] - minimo_bucle) / (maximo_bucle - minimo_bucle)
+
+    if valor == valor_normalizado_alto_bucle:
+        print(f"El alumno {nombres[i]} tiene el valor normalizado más alto")
+
+    if valor == valor_normalizado_bajo_bucle:
+        print(f"El alumno {nombres[i]} tiene el valor normalizado más bajo")
+
+
+# Metodo 3: Pandas
+print("PANDAS")
+alumno_encima = df[df['puntos_prueba'] > df['puntos_prueba'].mean()]
+alumno_debajo = df[df['puntos_prueba'] < df['puntos_prueba'].mean()]
+alumno_alto = df[df['normalizacion'] == df['normalizacion'].max()]
+alumno_bajo = df[df['normalizacion'] == df['normalizacion'].min()]
+
+
+print(f"Valor normalizado alto: {alumno_alto[['nombre', 'normalizacion']]}")
+print(f"Valor normalizado bajo: {alumno_bajo[['nombre', 'normalizacion']]}")
+print(f"Valor media por encima: {alumno_encima[['nombre', 'puntos_prueba']]}")
+print(f"Valor por media por denajo: {alumno_debajo[['nombre', 'puntos_prueba']]}")
